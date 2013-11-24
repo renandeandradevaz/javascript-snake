@@ -7,6 +7,10 @@
 	<body>
 		<style>
 		
+			body{
+				text-align: center;
+			}
+		
 			#perdeu-playboy{
 				display: none;
 				text-align: center;
@@ -37,6 +41,30 @@
 				padding: 20px;
 				font-size: 20px;
 			}
+			
+			.game-container{
+				display: none;
+			}
+			
+			.pontuacao{
+				display: none;
+			}
+			
+			#play{
+				background-color: rgb(174, 64, 236);
+				width: 200px;
+				height: 100px;
+				font-size: 40px;
+				color: white;
+				border-radius: 10px;
+				border-color: rgb(158, 158, 233);
+				cursor: pointer;
+				margin-top: 200px;
+			}
+			
+			#play:hover{
+				background-color: rgb(193, 106, 243);
+			}
 		
 		</style>
 		
@@ -47,6 +75,8 @@
 			
 			<h5> Pressione "ctrl" para pausar o jogo </h5>
 		</div>
+		
+		<button id='play'> Jogar </button>
 
 		<table class="game-container" >	
 		</table>
@@ -74,12 +104,19 @@
 		fila.push("9-10");
 	
 		$(document).ready(function(){
-
+			
 			criarEstruturaTabela();
 			
-			intervaloRealizarMovimentos = setInterval(realizarMovimentos, 100);
+			$("#play").on("click", function (e) {
+				
+				$("#play").hide();
+				$(".game-container").show();
+				$(".pontuacao").show();
 
-			escutarEventosDoTeclado();
+				intervaloRealizarMovimentos = setInterval(realizarMovimentos, 100);
+	
+				escutarEventosDoTeclado();
+			});
 		});
 			
 		function escutarEventosDoTeclado(){
@@ -159,40 +196,40 @@
 				pontuacao++;
 				$("#pontuacao").text(pontuacao);
 				
-				if(pontuacao > 10 && pontuacao < 30){
+				if(pontuacao >= 10 && pontuacao < 30){
 					
 					aumentarVelocidade(50);
 				}
 				
-				if(pontuacao > 30 && pontuacao < 60){
+				if(pontuacao >= 30 && pontuacao < 60){
 					
 					aumentarVelocidade(40);
 				}
 				
-				if(pontuacao > 60 && pontuacao < 100){
+				if(pontuacao >= 60 && pontuacao < 100){
 					
 					aumentarVelocidade(35);
 				}
 				
-				if(pontuacao > 100){
+				if(pontuacao >= 100){
 					
 					aumentarVelocidade(30);
 				}
+				
+				$("#" + posicaoAtual).removeClass("item");
 
 				var eixoXAleatorio = gerarNumeroAleatorio();
 				var eixoYAleatorio = gerarNumeroAleatorio();
 				
 				var posicaoAleatoria = eixoXAleatorio + "-" + eixoYAleatorio;
 				
-				while($("#" + posicaoAleatoria).hasClass("item")){
+				while($("#" + posicaoAleatoria).hasClass("preenchido")){
 					
 					eixoXAleatorio = gerarNumeroAleatorio();
 					eixoYAleatorio = gerarNumeroAleatorio();
 					
 					posicaoAleatoria = eixoXAleatorio + "-" + eixoYAleatorio;
 				}
-				
-				$("#" + posicaoAtual).removeClass("item");
 				
 				$("#" + posicaoAleatoria).addClass("item");
 			}
