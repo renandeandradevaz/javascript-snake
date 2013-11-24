@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>Snake</title>
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	</head>
+	
+	<body>
+		<style>
+			
+			.game-container{
+				border: 5px solid black;
+				margin: auto;
+			}
+			
+			.quadradinho{
+				width: 10px;
+				height: 10px;
+			}
+			
+			.preenchido{
+				background-color: black;
+			}
+		
+		</style>
+	
+		
+		<table class="game-container" >	
+		</table>
+
+	</body>
+	
+	<script>
+	
+		var posicaoAtual = "10-10";
+		var direcao = "direita";
+	
+		$(document).ready(function(){
+			
+			criarEstruturaTabela();
+			
+			setInterval(realizarMovimentos, 50);
+			
+			escutarEventosDoTeclado();
+		});
+			
+		function escutarEventosDoTeclado(){
+			
+			$("body").on("keydown", function (e) {
+				
+				var tecla = (window.event) ? event.keyCode : e.which;
+				
+				if(tecla == 37 && direcao != "direita"){
+					direcao = "esquerda";
+				}
+				if(tecla == 38 && direcao != "baixo"){
+					direcao = "cima";
+				}
+				if(tecla == 39 && direcao != "esquerda"){
+					direcao = "direita";
+				}
+				if(tecla == 40 && direcao != "cima"){
+					direcao = "baixo";
+				}
+			});
+		}
+		
+		function criarEstruturaTabela(){
+			
+			for(i=1 ; i<=50 ; i++){
+				
+				$(".game-container").append("<tr>");
+				
+				for(j=1 ; j<=50 ; j++){
+					
+					$(".game-container tr:last").append("<td>");
+					$(".game-container td:last").addClass("quadradinho");
+					$(".game-container td:last").attr("id", j + "-" + i);
+				}
+			}
+		}
+		
+		function realizarMovimentos(){
+			
+			var eixoX = posicaoAtual.substring(0, posicaoAtual.indexOf("-"));
+			var eixoY = posicaoAtual.substring(posicaoAtual.indexOf("-") + 1);
+			
+			if(direcao == 'direita'){
+				
+				posicaoAtual = parseInt(eixoX) + 1 + '-' + eixoY;
+			}
+			
+			if(direcao == 'esquerda'){
+				
+				posicaoAtual = parseInt(eixoX) - 1 + '-' + eixoY;
+			}
+			
+			if(direcao == 'cima'){
+				
+				posicaoAtual = eixoX + '-' + (parseInt(eixoY) - 1);
+			}
+			
+			if(direcao == 'baixo'){
+				
+				posicaoAtual = eixoX + '-' + (parseInt(eixoY) + 1);
+			}
+			
+			$("#" + posicaoAtual).addClass("preenchido");
+		}
+	
+	</script>
+	
+</html>
