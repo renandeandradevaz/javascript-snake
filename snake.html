@@ -42,6 +42,10 @@
 		
 		<div class='pontuacao'>
 			<h3> Pontuacao atual: <b id = 'pontuacao'> 0 </b> </h3>
+			
+			<br> <br>
+			
+			<h5> Pressione "ctrl" para pausar o jogo </h5>
 		</div>
 
 		<table class="game-container" >	
@@ -95,6 +99,9 @@
 				}
 				if(tecla == 40 && direcao != "cima"){
 					direcao = "baixo";
+				}
+				if(tecla == 17){
+					alert("Aplicacao em pausa. Pressione ok para continuar");;
 				}
 			});
 		}
