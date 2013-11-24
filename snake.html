@@ -26,8 +26,23 @@
 			.preenchido{
 				background-color: black;
 			}
+			
+			.item{
+				background-color: red;
+			}
+			
+			.pontuacao{
+				position: absolute;
+				top: 200px;
+				padding: 20px;
+				font-size: 20px;
+			}
 		
 		</style>
+		
+		<div class='pontuacao'>
+			<h3> Pontuacao atual: <b id = 'pontuacao'> 0 </b> </h3>
+		</div>
 
 		<table class="game-container" >	
 		</table>
@@ -35,7 +50,7 @@
 		<div id='perdeu-playboy'>
 			<h1> PERDEU PLAYBOY  </h1>
 			<br>
-			<h3> Pontuacao: </h3>
+			<h3> Pontuacao: <b id = 'pontuacao-final'> 0 </b> </h3>
 			<br>
 			<a href="./snake.html"> Jogar novamente </a>
 		</div>
@@ -44,8 +59,8 @@
 	
 	<script>
 	
+		var pontuacao = 0;
 		var larguraAlturaMaxima = 50; 
-	
 		var posicaoAtual = "10-10";
 		var direcao = "direita";
 		
@@ -53,17 +68,13 @@
 		fila.push("7-10");
 		fila.push("8-10");
 		fila.push("9-10");
-		
-		$("#7-10").addClass("preenchido");
-		$("#8-10").addClass("preenchido");
-		$("#9-10").addClass("preenchido");
 	
 		$(document).ready(function(){
 
 			criarEstruturaTabela();
 			
-			setInterval(realizarMovimentos, 200);
-			
+			intervaloRealizarMovimentos = setInterval(realizarMovimentos, 100);
+
 			escutarEventosDoTeclado();
 		});
 			
@@ -101,6 +112,8 @@
 					$(".game-container td:last").attr("id", j + "-" + i);
 				}
 			}
+			
+			$("#30-30").addClass("item");
 		}
 		
 		function realizarMovimentos(){
@@ -131,8 +144,66 @@
 			verificarSePerdeu();
 
 			$("#" + posicaoAtual).addClass("preenchido");
+			
 			fila.push(posicaoAtual);
-			$("#" + fila.shift()).removeClass("preenchido");
+			
+			if($("#" + posicaoAtual).hasClass("item")){
+
+				pontuacao++;
+				$("#pontuacao").text(pontuacao);
+				
+				if(pontuacao > 10 && pontuacao < 30){
+					
+					aumentarVelocidade(50);
+				}
+				
+				if(pontuacao > 30 && pontuacao < 60){
+					
+					aumentarVelocidade(40);
+				}
+				
+				if(pontuacao > 60 && pontuacao < 100){
+					
+					aumentarVelocidade(35);
+				}
+				
+				if(pontuacao > 100){
+					
+					aumentarVelocidade(30);
+				}
+
+				var eixoXAleatorio = gerarNumeroAleatorio();
+				var eixoYAleatorio = gerarNumeroAleatorio();
+				
+				var posicaoAleatoria = eixoXAleatorio + "-" + eixoYAleatorio;
+				
+				while($("#" + posicaoAleatoria).hasClass("item")){
+					
+					eixoXAleatorio = gerarNumeroAleatorio();
+					eixoYAleatorio = gerarNumeroAleatorio();
+					
+					posicaoAleatoria = eixoXAleatorio + "-" + eixoYAleatorio;
+				}
+				
+				$("#" + posicaoAtual).removeClass("item");
+				
+				$("#" + posicaoAleatoria).addClass("item");
+			}
+			
+			else{
+
+				$("#" + fila.shift()).removeClass("preenchido");
+			}
+		}
+		
+		function aumentarVelocidade(milissegundos){
+			
+			clearInterval(intervaloRealizarMovimentos);
+			intervaloRealizarMovimentos = setInterval(realizarMovimentos, milissegundos);
+		}
+		
+		function gerarNumeroAleatorio(){
+			return Math.floor((Math.random() * larguraAlturaMaxima) + 1);
 		}
 		
 		function obterEixoX(){
@@ -154,6 +225,8 @@
 				
 				$(".game-container").hide();
 				$("#perdeu-playboy").show();
+				$("#pontuacao-final").text(pontuacao);
+				$(".pontuacao").remove();
 			}
 		}
 	
