@@ -6,6 +6,12 @@
 	
 	<body>
 		<style>
+		
+			#perdeu-playboy{
+				display: none;
+				text-align: center;
+				padding: 100px;
+			}
 			
 			.game-container{
 				border: 5px solid black;
@@ -22,23 +28,41 @@
 			}
 		
 		</style>
-	
-		
+
 		<table class="game-container" >	
 		</table>
+		
+		<div id='perdeu-playboy'>
+			<h1> PERDEU PLAYBOY  </h1>
+			<br>
+			<h3> Pontuacao: </h3>
+			<br>
+			<a href="./snake.html"> Jogar novamente </a>
+		</div>
 
 	</body>
 	
 	<script>
 	
+		var larguraAlturaMaxima = 50; 
+	
 		var posicaoAtual = "10-10";
 		var direcao = "direita";
+		
+		var fila = [];
+		fila.push("7-10");
+		fila.push("8-10");
+		fila.push("9-10");
+		
+		$("#7-10").addClass("preenchido");
+		$("#8-10").addClass("preenchido");
+		$("#9-10").addClass("preenchido");
 	
 		$(document).ready(function(){
-			
+
 			criarEstruturaTabela();
 			
-			setInterval(realizarMovimentos, 50);
+			setInterval(realizarMovimentos, 200);
 			
 			escutarEventosDoTeclado();
 		});
@@ -66,11 +90,11 @@
 		
 		function criarEstruturaTabela(){
 			
-			for(i=1 ; i<=50 ; i++){
+			for(i=1 ; i<=larguraAlturaMaxima ; i++){
 				
 				$(".game-container").append("<tr>");
 				
-				for(j=1 ; j<=50 ; j++){
+				for(j=1 ; j<=larguraAlturaMaxima ; j++){
 					
 					$(".game-container tr:last").append("<td>");
 					$(".game-container td:last").addClass("quadradinho");
@@ -81,30 +105,56 @@
 		
 		function realizarMovimentos(){
 			
-			var eixoX = posicaoAtual.substring(0, posicaoAtual.indexOf("-"));
-			var eixoY = posicaoAtual.substring(posicaoAtual.indexOf("-") + 1);
+			var eixoX = obterEixoX();
+			var eixoY = obterEixoY();
 			
 			if(direcao == 'direita'){
 				
-				posicaoAtual = parseInt(eixoX) + 1 + '-' + eixoY;
+				posicaoAtual = eixoX + 1 + '-' + eixoY;
 			}
 			
 			if(direcao == 'esquerda'){
 				
-				posicaoAtual = parseInt(eixoX) - 1 + '-' + eixoY;
+				posicaoAtual = eixoX - 1 + '-' + eixoY;
 			}
 			
 			if(direcao == 'cima'){
 				
-				posicaoAtual = eixoX + '-' + (parseInt(eixoY) - 1);
+				posicaoAtual = eixoX + '-' + (eixoY - 1);
 			}
 			
 			if(direcao == 'baixo'){
 				
-				posicaoAtual = eixoX + '-' + (parseInt(eixoY) + 1);
+				posicaoAtual = eixoX + '-' + (eixoY + 1);
 			}
 			
+			verificarSePerdeu();
+
 			$("#" + posicaoAtual).addClass("preenchido");
+			fila.push(posicaoAtual);
+			$("#" + fila.shift()).removeClass("preenchido");
+		}
+		
+		function obterEixoX(){
+			
+			return parseInt(posicaoAtual.substring(0, posicaoAtual.indexOf("-")));
+		}
+		
+		function obterEixoY(){
+			
+			return parseInt(posicaoAtual.substring(posicaoAtual.indexOf("-") + 1));
+		}
+		
+		function verificarSePerdeu(){
+			
+			eixoX = obterEixoX();
+			eixoY = obterEixoY();
+			
+			if(eixoX > larguraAlturaMaxima || eixoX < 1 || eixoY > larguraAlturaMaxima || eixoY < 1 || $("#" + posicaoAtual).hasClass("preenchido")){
+				
+				$(".game-container").hide();
+				$("#perdeu-playboy").show();
+			}
 		}
 	
 	</script>
