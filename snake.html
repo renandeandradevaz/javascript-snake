@@ -50,6 +50,10 @@
 				display: none;
 			}
 			
+			#informacoes-previas{
+				margin-top: 150px;
+			}
+			
 			#play{
 				background-color: rgb(174, 64, 236);
 				width: 200px;
@@ -59,7 +63,6 @@
 				border-radius: 10px;
 				border-color: rgb(158, 158, 233);
 				cursor: pointer;
-				margin-top: 200px;
 			}
 			
 			#play:hover{
@@ -76,7 +79,15 @@
 			<h5> Pressione "ctrl" para pausar o jogo </h5>
 		</div>
 		
-		<button id='play'> Jogar </button>
+		<div id="informacoes-previas">
+			
+			<label style="font-size: 16px;" > Tamanho do quadrado: </label>
+			<input type="text" style="width: 60px; padding: 5px; font-size: 14px; " id='quantidade-quadradinhos' value="40" >
+			
+			<br> <br> <br> <br>
+			
+			<button id='play'> Jogar </button>
+		</div>
 
 		<table class="game-container" >	
 		</table>
@@ -94,7 +105,6 @@
 	<script>
 	
 		var pontuacao = 0;
-		var larguraAlturaMaxima = 50; 
 		var posicaoAtual = "10-10";
 		var direcao = "direita";
 		
@@ -104,12 +114,14 @@
 		fila.push("9-10");
 	
 		$(document).ready(function(){
-			
-			criarEstruturaTabela();
-			
+
 			$("#play").on("click", function (e) {
 				
-				$("#play").hide();
+				larguraAlturaMaxima = $("#quantidade-quadradinhos").val();
+				
+				criarEstruturaTabela();
+				
+				$("#informacoes-previas").hide();
 				$(".game-container").show();
 				$(".pontuacao").show();
 
